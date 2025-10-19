@@ -26,6 +26,7 @@
             }
         }
 
+        
         $uzytkownicy = [];
         
         $uzytkownicy[0] = new User();
@@ -37,7 +38,8 @@
         $uzytkownicy[1]->addUser("admin", "admin");
         $uzytkownicy[2]->addUser("user", "password");
 
-
+        file_put_contents('database.json', json_encode($uzytkownicy));
+        
         if(isset($_POST["login"], $_POST["password"]))
         {
             $login = $_POST["login"];
