@@ -8,8 +8,8 @@
 <body>
     <form method="post" action="login.php">
         <input type="text" placeholder="Login" name="login"><br>
-        <input type="password" placeholder="Hasło" name="password"><br>
-        <input type="submit" value="Zaloguj się">
+        <input type="password" placeholder="Password" name="password"><br>
+        <input type="submit" value="Log in">
     </form>
 </body>
 </html>

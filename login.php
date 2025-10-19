@@ -8,17 +8,17 @@
 <body>
     <?php
         class User{
-            public $nazwa;
-            public $haslo;
+            private $username;
+            private $password;
 
-            function addUser($user, $password)
+            function addUser($user_input, $password_input)
             {
-                $this->nazwa = $user;
-                $this->haslo = $password;
+                $this->username = $user_input;
+                $this->password = $password_input;
             }
-            function CheckLogin($user, $password)
+            function CheckLogin($user_input, $password_input)
             {
-                if($this->haslo==$password && $this->nazwa==$user)
+                if($this->password==$password_input && $this->username==$user_input)
                 {
                     return true;
                 }
@@ -31,6 +31,7 @@
         $uzytkownicy[0] = new User();
         $uzytkownicy[1] = new User();
         $uzytkownicy[2] = new User();
+
         
         $uzytkownicy[0]->addUser("frank", "abc12345");
         $uzytkownicy[1]->addUser("admin", "admin");
@@ -43,7 +44,7 @@
             $password = $_POST["password"];
             $userLoggedIn = false;
             
-            for($i = 0; $i<3; $i++)
+            for($i = 0; $i<sizeof($uzytkownicy); $i++)
             {
                 if($userLoggedIn == true) break;
                 if($userLoggedIn == false)
@@ -59,5 +60,4 @@
         
     ?>
 </body>
-
 </html>
