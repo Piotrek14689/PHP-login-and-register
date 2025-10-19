@@ -52,11 +52,12 @@
                 }
 
             }
-            if($userLoggedIn == true) echo "Witaj";
-            else echo "Spadaj";       
+            if($userLoggedIn == true) echo "Succesfully logged in!";
+            else echo "Incorrect username or password.";       
             
         }
         
     ?>
 </body>
+
 </html>
