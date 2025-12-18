@@ -15,62 +15,54 @@
             <input type="submit" value="Log in">
         </form>
         <?php
-            class User{
-                private $username;
-                private $password;
+            // class User{
+            //     private $username;
+            //     private $password;
 
-                function addUser($user_input, $password_input)
-                {
-                    $this->username = $user_input;
-                    $this->password = $password_input;
-                }
-                function CheckLogin($user_input, $password_input)
-                {
-                    if($this->password==$password_input && $this->username==$user_input)
-                    {
-                        return true;
-                    }
-                    else return false;
-                }
-            }
+            //     function addUser($user_input, $password_input)
+            //     {
+            //         $this->username = $user_input;
+            //         $this->password = $password_input;
+            //     }
+            //     function CheckLogin($user_input, $password_input)
+            //     {
+            //         if($this->password==$password_input && $this->username==$user_input)
+            //         {
+            //             return true;
+            //         }
+            //         else return false;
+            //     }
+            // }
+
             
-
-            $users = [];
-
-            $con = mysqli_connect("localhost", "root", "", "users_db");
-            $res = mysqli_query($con, "SELECT * FROM users");
-            $j=0;
-            while($temp = mysqli_fetch_assoc($res))
-            {
-                $users[$j] = new User();
-                $users[$j]->addUser($temp["username"], $temp["password"]);
-                $j++;
-            }
-
-
-            mysqli_close($con);
             
             if(isset($_POST["login"], $_POST["password"]))
             {
+                
                 $login = $_POST["login"];
                 $password = $_POST["password"];
-                $userLoggedIn = false;
                 
-                for($i = 0; $i<sizeof($users); $i++)
-                {
-                    if($userLoggedIn == true) break;
-                    if($userLoggedIn == false)
-                    {
-                        $userLoggedIn = $users[$i]->CheckLogin($login, $password);
-                    }
+                $con = mysqli_connect("localhost", "root", "", "users_db");
+                $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}' AND password='{$password}'"); 
 
+                if(mysqli_num_rows($res)==0)
+                {
+                    echo "Incorrect username or password";
+                    return;
                 }
-                if($userLoggedIn == true) echo "Succesfully logged in!";
-                else echo "Incorrect username or password.";       
+                while($users = mysqli_fetch_assoc($res))
+                {
+                    echo "Welcome, {$users['username']}";
+                }
+                   
+
+
+                mysqli_close($con);
+
+
+                
                 
             }
-            //else echo "Please enter username and password.";
-            
         ?>
 
     </div>
