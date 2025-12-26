@@ -14,46 +14,58 @@
             <input type="password" placeholder="Password" name="password"><br>
             <input type="submit" value="Log in">
         </form>
+        No account? <a href="register.php">Register here</a>
+        <br><br>
         <?php
-            // class User{
-            //     private $username;
-            //     private $password;
-
-            //     function addUser($user_input, $password_input)
-            //     {
-            //         $this->username = $user_input;
-            //         $this->password = $password_input;
-            //     }
-            //     function CheckLogin($user_input, $password_input)
-            //     {
-            //         if($this->password==$password_input && $this->username==$user_input)
-            //         {
-            //             return true;
-            //         }
-            //         else return false;
-            //     }
-            // }
-
-            
             
             if(isset($_POST["login"], $_POST["password"]))
-            {
-                
-                $login = $_POST["login"];
-                $password = $_POST["password"];
-                
+            {     
                 $con = mysqli_connect("localhost", "root", "", "users_db");
-                $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}' AND password='{$password}'"); 
+                if(!$con)
+                {
+                    echo "Database error!";
+                    return;
+                }
+                $login = $_POST["login"];
+                $login_escaped = mysqli_real_escape_string($con, $_POST["login"]);
+                $password_input = $_POST["password"];
+
+                $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login_escaped}'"); 
 
                 if(mysqli_num_rows($res)==0)
                 {
                     echo "Incorrect username or password";
                     return;
                 }
+                
                 while($users = mysqli_fetch_assoc($res))
                 {
-                    echo "Welcome, {$users['username']}";
+                    $password_hash = $users["password"]; 
                 }
+
+                if(!password_verify($password_input, $password_hash))
+                {
+                    echo "Incorrect username or password";
+                    return;
+                }
+
+                echo "Welcome, {$login}";
+                
+
+
+
+
+                // $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}' AND password='{$password}'"); 
+
+                // if(mysqli_num_rows($res)==0)
+                // {
+                //     echo "Incorrect username or password";
+                //     return;
+                // }
+                // while($users = mysqli_fetch_assoc($res))
+                // {
+                //     echo "Welcome, {$users['username']}";
+                // }
                    
 
 
