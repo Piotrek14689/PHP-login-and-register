@@ -52,6 +52,11 @@
             ☀️ Light Mode
         </button>
     </div>
+    <div class="d-md-none text-center mb-3">
+        <button id="theme-toggle-mobile" class="btn btn-outline-secondary btn-sm">
+            ☀️ Light Mode
+        </button>
+    </div>
     <div class="container">
         <div class="mx-auto my-5 p-4 card shadow-sm" style="max-width:500px; ">
             <h1 class="mb-3">Login</h1>
@@ -92,35 +97,6 @@
         
 
     </div>
-    <script>
-        const button = document.querySelector("#theme-toggle");
-        const html = document.querySelector("html");
-        const savedTheme = localStorage.getItem("theme");
-
-        if(savedTheme)
-        {
-            html.setAttribute("data-bs-theme", savedTheme);
-            button.innerHTML = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
-        }
-        
-
-
-        button.addEventListener("click", () =>{
-            let theme = html.getAttribute("data-bs-theme");
-            if(theme === "dark")
-            {
-                button.innerHTML = "🌙 Dark Mode";
-                html.setAttribute("data-bs-theme", "light");
-                localStorage.setItem("theme", "light");
-            }
-            else if(theme === "light")
-            {
-                button.innerHTML = "☀️ Light Mode";
-                html.setAttribute("data-bs-theme", "dark");
-                localStorage.setItem("theme", "dark");
-            }    
-
-        })
-    </script>
+    <script src="js/theme.js"></script>
 </body>
 </html>
