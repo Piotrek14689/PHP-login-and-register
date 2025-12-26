@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,44 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mb-3">Register</h1>
-        <!-- <form>
-            <input type="text" placeholder="Login" name="login" id="login"><br>
-            <input type="password" placeholder="Password" name="password" id="password"><br>
-            <input type="password" placeholder="Repeat password" name="password2" id="password2"><br>
-            <input type="submit" value="Register">
-        </form> -->
-        <form method="post" action="register.php" class="mb-3">
-            <div class="mb-3">
-                <label for="login" class="form-label">Login</label>
-                <input type="text" class="form-control" id="login" name="login">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <div class="mb-3">
-                <label for="password2" class="form-label">Confirm password</label>
-                <input type="password" class="form-control" id="password" name="password2">
-            </div>
-            <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-
-
-        Already have an account? <a href="login.php">Login here</a>
-        <br><br>
-        <?php
-            
-            if(isset($_POST["login"], $_POST["password"], $_POST["password2"]))
-            {     
-                if($_POST["password"] != $_POST["password2"]) 
-                {
-                    echo "Passwords don't match!";
-                    return;
-                }
+    <?php
+        $error = null;
+        $success = null;
+        if(isset($_POST["login"], $_POST["password"], $_POST["password2"]))
+        {     
+            if($_POST["password"] != $_POST["password2"]) 
+            {
+                $error = "Passwords don't match!";
+            }
+            else
+            {
                 $con = mysqli_connect("localhost", "root", "", "users_db");
-                
 
                 $login = mysqli_real_escape_string($con, $_POST["login"]);
                 $password = mysqli_real_escape_string($con, password_hash($_POST["password"], PASSWORD_DEFAULT));
@@ -55,20 +29,96 @@
 
                 if(mysqli_num_rows($res)!=0)
                 {
-                    echo "Username already taken!";
-                    return;
+                    $error = "Username already taken!";
                 }
-                mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password}')");
+                else
+                {
+                    mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password}')");
+                    $success = "Successfully created account!";
+                }
+                    
 
                 mysqli_close($con);
 
 
-                
-                
             }
-        ?>
-
+            
+            
+        }
+    ?>
+    <div class="d-flex justify-content-end p-2">
+        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm d-none d-md-inline">
+            ☀️ Light Mode
+        </button>
     </div>
-    
+    <div class="container">
+        <div class="mx-auto my-5 p-4 card shadow-sm" style="max-width:500px;">    
+            <h1 class="mb-3">Register</h1>
+
+            <?php if($error): ?>
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+            <?php if($success): ?>
+                <div class="alert alert-success">
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
+            <form method="post" action="register.php" class="mb-3">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="login" name="login">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <div class="mb-3">
+                    <label for="password2" class="form-label">Confirm password</label>
+                    <input type="password" class="form-control" id="password2" name="password2">
+                </div>
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    Already have an account? 
+                    <a href="login.php" class="link-primary">Login here</a>
+                </small>
+            </div>
+            
+        </div>
+    </div>
+    <script>
+        const button = document.querySelector("#theme-toggle");
+        const html = document.querySelector("html");
+        const savedTheme = localStorage.getItem("theme");
+
+        if(savedTheme)
+        {
+            html.setAttribute("data-bs-theme", savedTheme);
+            button.innerHTML = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+        
+
+
+        button.addEventListener("click", () =>{
+            let theme = html.getAttribute("data-bs-theme");
+            if(theme === "dark")
+            {
+                button.innerHTML = "🌙 Dark Mode";
+                html.setAttribute("data-bs-theme", "light");
+                localStorage.setItem("theme", "light");
+            }
+            else if(theme === "light")
+            {
+                button.innerHTML = "☀️ Light Mode";
+                html.setAttribute("data-bs-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            }    
+
+        })
+    </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,36 +8,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1 class="mb-3">Login</h1>
-        <!-- <form method="post" action="login.php">
-            <input type="text" placeholder="Login" name="login"><br>
-            <input type="password" placeholder="Password" name="password"><br>
-            <input type="submit" value="Log in">
-        </form> -->
-        <form method="post" action="login.php" class="mb-3">
-            <div class="mb-3">
-                <label for="login" class="form-label">Login</label>
-                <input type="text" class="form-control" id="login" name="login">
-            </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Password</label>
-                <input type="password" class="form-control" id="password" name="password">
-            </div>
-            <button type="submit" class="btn btn-primary">Login</button>
-        </form>
-        No account? <a href="register.php">Register here</a>
-        <br><br>
-        <?php
-            
-            if(isset($_POST["login"], $_POST["password"]))
-            {     
-                $con = mysqli_connect("localhost", "root", "", "users_db");
-                if(!$con)
-                {
-                    echo "Database error!";
-                    return;
-                }
+    <?php
+        // TO DO: INPUT VALIDATION!!!!!
+        $error = null;
+        $success = null;
+        if(isset($_POST["login"], $_POST["password"]))
+        { 
+            $con = mysqli_connect("localhost", "root", "", "users_db");
+            if(!$con)
+            {
+                echo "Database error!";
+            }
+            else{
                 $login = $_POST["login"];
                 $login_escaped = mysqli_real_escape_string($con, $_POST["login"]);
                 $password_input = $_POST["password"];
@@ -46,50 +28,99 @@
 
                 if(mysqli_num_rows($res)==0)
                 {
-                    echo "Incorrect username or password";
-                    return;
-                }
-                
-                while($users = mysqli_fetch_assoc($res))
-                {
-                    $password_hash = $users["password"]; 
-                }
+                    $error = "Incorrect username or password";
+                }else{
+                    while($users = mysqli_fetch_assoc($res))
+                    {
+                        $password_hash = $users["password"]; 
+                    }
 
-                if(!password_verify($password_input, $password_hash))
-                {
-                    echo "Incorrect username or password";
-                    return;
-                }
-
-                echo "Welcome, {$login}";
-                
-
-
-
-
-                // $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}' AND password='{$password}'"); 
-
-                // if(mysqli_num_rows($res)==0)
-                // {
-                //     echo "Incorrect username or password";
-                //     return;
-                // }
-                // while($users = mysqli_fetch_assoc($res))
-                // {
-                //     echo "Welcome, {$users['username']}";
-                // }
-                   
-
-
+                    if(!password_verify($password_input, $password_hash))
+                    {
+                        $error = "Incorrect username or password";
+                        
+                    }else{
+                        $success = "Welcome, {$login}";
+                    }
+                }          
                 mysqli_close($con);
+            }             
+        }
+    ?>
+    <div class="d-flex justify-content-end p-2">
+        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm d-none d-md-inline">
+            ☀️ Light Mode
+        </button>
+    </div>
+    <div class="container">
+        <div class="mx-auto my-5 p-4 card shadow-sm" style="max-width:500px; ">
+            <h1 class="mb-3">Login</h1>
+            <?php if($error): ?>
+                <div class="alert alert-danger">
+                    <?= htmlspecialchars($error) ?>
+                </div>
+            <?php endif; ?>
+            <?php if($success): ?>
+                <div class="alert alert-success">
+                    <?= htmlspecialchars($success) ?>
+                </div>
+            <?php endif; ?>
 
 
-                
-                
-            }
-        ?>
+            <form method="post" action="login.php" class="mb-3">
+                <div class="mb-3">
+                    <label for="login" class="form-label">Login</label>
+                    <input type="text" class="form-control" id="login" name="login">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password">
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <div class="text-center mt-3">
+                <small class="text-muted">
+                    Don't have an account? 
+                    <a href="register.php" class="link-primary">Register now</a>
+                </small>
+            </div>
+            
+
+
+
+        </div>
+        
 
     </div>
-    
+    <script>
+        const button = document.querySelector("#theme-toggle");
+        const html = document.querySelector("html");
+        const savedTheme = localStorage.getItem("theme");
+
+        if(savedTheme)
+        {
+            html.setAttribute("data-bs-theme", savedTheme);
+            button.innerHTML = savedTheme === 'dark' ? '☀️ Light Mode' : '🌙 Dark Mode';
+        }
+        
+
+
+        button.addEventListener("click", () =>{
+            let theme = html.getAttribute("data-bs-theme");
+            if(theme === "dark")
+            {
+                button.innerHTML = "🌙 Dark Mode";
+                html.setAttribute("data-bs-theme", "light");
+                localStorage.setItem("theme", "light");
+            }
+            else if(theme === "light")
+            {
+                button.innerHTML = "☀️ Light Mode";
+                html.setAttribute("data-bs-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            }    
+
+        })
+    </script>
 </body>
 </html>
