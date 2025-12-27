@@ -4,10 +4,13 @@ class Login
     private $success_message = null;
     private $error_message = null;
 
-    // private function checkUsername()
-    // {
+    private function checkUsername($username)
+    {
+        if(ctype_alnum($username))
+            return true;
+        return false;
 
-    // }
+    }
 
     public function login()
     {
@@ -19,6 +22,12 @@ class Login
             $login = $_POST["login"];
             $login_escaped = mysqli_real_escape_string($con, $_POST["login"]);
             $password_input = $_POST["password"];
+
+            if(!$this->checkUsername($login))
+            {
+                $this->error_message = "Username must contain only alphanumeric characters.";
+                return;
+            }
 
             $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login_escaped}'");
 
@@ -42,16 +51,25 @@ class Login
     }
     public function register()
     {
+        
         if (!empty($_POST["login"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
+            $login = $_POST["login"];
+            $password = $_POST["password"];
+            $confirm_password = $_POST["confirm_password"];
 
-            if ($_POST["password"] != $_POST["confirm_password"]) {
+            if ($password != $confirm_password) {
                 $this->error_message = "Passwords don't match!";
                 return;
-            } 
+            }
+            if(!($this->checkUsername($login)))
+            {
+                $this->error_message = "Username must contain ONLY alphanumeric characters.";
+                return;
+            }
             $con = mysqli_connect("localhost", "root", "", "users_db");
 
-            $login = mysqli_real_escape_string($con, $_POST["login"]);
-            $password = mysqli_real_escape_string($con, password_hash($_POST["password"], PASSWORD_DEFAULT));
+            $login_escaped = mysqli_real_escape_string($con, $login);
+            $password_escaped = mysqli_real_escape_string($con, password_hash($password, PASSWORD_DEFAULT));
 
 
             $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}'");
@@ -60,7 +78,7 @@ class Login
                 $this->error_message = "Username already taken!";
                 return;
             } 
-            mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password}')");
+            mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password_escaped}')");
             $this->success_message = "Successfully created account!";
             
 
