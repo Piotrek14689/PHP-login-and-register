@@ -9,50 +9,12 @@
 </head>
 <body>
     <?php
-        $error = null;
-        $success = null;
-        if(isset($_POST["login"], $_POST["password"], $_POST["password2"]))
-        {     
-            if($_POST["password"] != $_POST["password2"]) 
-            {
-                $error = "Passwords don't match!";
-            }
-            else
-            {
-                $con = mysqli_connect("localhost", "root", "", "users_db");
-
-                $login = mysqli_real_escape_string($con, $_POST["login"]);
-                $password = mysqli_real_escape_string($con, password_hash($_POST["password"], PASSWORD_DEFAULT));
-                
-
-                $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}'"); 
-
-                if(mysqli_num_rows($res)!=0)
-                {
-                    $error = "Username already taken!";
-                }
-                else
-                {
-                    mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password}')");
-                    $success = "Successfully created account!";
-                }
-                    
-
-                mysqli_close($con);
-
-
-            }
-            
-            
-        }
+        require("functions.php");
+        $login = new Login();
+        $login->register();
     ?>
     <div class="d-flex justify-content-end p-2">
-        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm d-none d-md-inline">
-            ☀️ Light Mode
-        </button>
-    </div>
-    <div class="d-md-none text-center mb-3">
-        <button id="theme-toggle-mobile" class="btn btn-outline-secondary btn-sm">
+        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm d-md-inline">
             ☀️ Light Mode
         </button>
     </div>
@@ -63,14 +25,14 @@
         <div class="mx-auto my-5 p-4 card shadow-sm" style="max-width:500px;">    
             <h1 class="mb-3">Register</h1>
 
-            <?php if($error): ?>
+            <?php if($login->getError()): ?>
                 <div class="alert alert-danger">
-                    <?= htmlspecialchars($error) ?>
+                    <?= htmlspecialchars($login->getError()) ?>
                 </div>
             <?php endif; ?>
-            <?php if($success): ?>
+            <?php if($login->getSuccess()): ?>
                 <div class="alert alert-success">
-                    <?= htmlspecialchars($success) ?>
+                    <?= htmlspecialchars($login->getSuccess()) ?>
                 </div>
             <?php endif; ?>
             <form method="post" action="register.php" class="mb-3">
@@ -84,7 +46,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="password2" class="form-label">Confirm password</label>
-                    <input type="password" class="form-control" id="password2" name="password2">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                 </div>
                 <button type="submit" class="btn btn-primary">Register</button>
             </form>
