@@ -12,6 +12,17 @@ class Login
 
     }
 
+    private function checkPassword($password)
+    {
+        return
+            preg_match('/[A-Z]/', $password) &&
+            preg_match('/[a-z]/', $password) &&
+            preg_match('/\d/', $password) &&
+            preg_match('/[^a-zA-Z0-9]/', $password);
+
+
+    }
+
     public function login()
     {
         if (!empty($_POST["login"]) && !empty($_POST["password"])) {
@@ -61,10 +72,14 @@ class Login
                 $this->error_message = "Passwords don't match!";
                 return;
             }
-            if(!($this->checkUsername($login)))
+            if(!$this->checkUsername($login))
             {
                 $this->error_message = "Username must contain ONLY alphanumeric characters.";
                 return;
+            }
+            if(!$this->checkPassword($password))
+            {
+                $this->error_message = "Password requirements not met.";
             }
             $con = mysqli_connect("localhost", "root", "", "users_db");
 
