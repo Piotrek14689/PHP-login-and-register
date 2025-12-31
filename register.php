@@ -50,14 +50,18 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                     <small class="text-muted d-flex align-items-center gap-1 mt-1 password-hint">
                         <span>ⓘ</span>
-                        Uppercase, lowercase, number, special character
+                        <span id="length" class="not-met">Mininum 8 chars</span>
+                        <span id="ucase" class="not-met">Uppercase</span>
+                        <span id="lcase" class="not-met">Lowercase</span>
+                        <span id="number" class="not-met">Number</span>
+                        <span id="special_character" class="not-met">Special character</span>
                     </small>
                 </div>
                 <div class="mb-3">
                     <label for="password2" class="form-label">Confirm password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary" disabled>Register</button>
             </form>
 
             <div class="text-center mt-3">
@@ -70,5 +74,6 @@
         </div>
     </div>
     <script src="js/theme.js"></script>
+    <script src="js/input_validation.js"></script>
 </body>
 </html>
