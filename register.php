@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register Page</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous" defer></script>
 </head>
 <body>
@@ -38,11 +39,19 @@
             <form method="post" action="register.php" class="mb-3">
                 <div class="mb-3">
                     <label for="login" class="form-label">Login</label>
-                    <input type="text" class="form-control" id="login" name="login">
+                    <input type="text" class="form-control" id="login" name="login" required autocomplete="off">
+                    <small class="login-hint text-muted d-flex align-items-center gap-1 mt-1">
+                        <span>ⓘ</span>
+                        Only letters and numbers.
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
+                    <input type="password" class="form-control" id="password" name="password" required>
+                    <small class="text-muted d-flex align-items-center gap-1 mt-1 password-hint">
+                        <span>ⓘ</span>
+                        Uppercase, lowercase, number, special character
+                    </small>
                 </div>
                 <div class="mb-3">
                     <label for="password2" class="form-label">Confirm password</label>

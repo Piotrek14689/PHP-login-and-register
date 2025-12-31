@@ -1,0 +1,25 @@
+.password-hint {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity .2s ease, max-height .2s ease;
+}
+.form-control:focus + .password-hint {
+    opacity: 1;
+    max-height: 40px;
+}
+
+
+.login-hint{
+    opacity: 0; 
+    max-height: 0;
+    overflow: hidden;
+    transition: opacity .2s ease, max-height .2s ease;
+    
+}
+
+
+.form-control:focus + .login-hint {
+    opacity: 1;
+    max-height: 40px;
+}
