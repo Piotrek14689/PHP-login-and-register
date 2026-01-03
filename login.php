@@ -12,19 +12,18 @@
         // TO DO: INPUT VALIDATION!!!!!
         require("functions.php");
         $login = new Login();
-        $login->login();
+        $login->login_authorization();
     ?>
     <div class="d-flex justify-content-end p-2">
-        <button id="theme-toggle" class="btn btn-outline-secondary btn-sm d-md-inline">
+        <button id="theme-toggle" class="btn śbtn-outline-secondary btn-sm d-md-inline">
             ☀️ Light Mode
         </button>
-    </div>
     </div>
     <div class="container">
         <div class="mx-auto my-5 p-4 card shadow-sm" style="max-width:500px; ">
             <h1 class="mb-3">Login</h1>
             <?php if($login->getError()): ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger">ś
                     <?= htmlspecialchars($login->getError()) ?>
                 </div>
             <?php endif; ?>

@@ -23,7 +23,7 @@ class Login
 
     }
 
-    public function login()
+    public function login_authorization()
     {
         if (!empty($_POST["login"]) && !empty($_POST["password"])) {
             $con = mysqli_connect("localhost", "root", "", "users_db");
@@ -33,6 +33,7 @@ class Login
             $login = $_POST["login"];
             $login_escaped = mysqli_real_escape_string($con, $_POST["login"]);
             $password_input = $_POST["password"];
+            $password_hash = null;
 
             if(!$this->checkUsername($login))
             {
@@ -40,7 +41,7 @@ class Login
                 return;
             }
 
-            $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login_escaped}'");
+            $res = mysqli_query($con, "SELECT * FROM users WHERE username='$login_escaped'");
 
             if (mysqli_num_rows($res) == 0) {
                 $this->error_message = "Incorrect username or password";
@@ -54,7 +55,7 @@ class Login
                 $this->error_message = "Incorrect username or password";
                 return;
             } 
-            $this->success_message = "Welcome, {$login}!";
+            $this->success_message = "Welcome, $login!";
             
             mysqli_close($con);
             
@@ -87,13 +88,13 @@ class Login
             $password_escaped = mysqli_real_escape_string($con, password_hash($password, PASSWORD_DEFAULT));
 
 
-            $res = mysqli_query($con, "SELECT * FROM users WHERE username='{$login}'");
+            $res = mysqli_query($con, "SELECT * FROM users WHERE username='$login'");
 
             if (mysqli_num_rows($res) != 0) {
                 $this->error_message = "Username already taken!";
                 return;
             } 
-            mysqli_query($con, "INSERT INTO users (username, password) VALUES ('{$login}', '{$password_escaped}')");
+            mysqli_query($con, "INSERT INTO users (username, password) VALUES ('$login_escaped', '$password_escaped')");
             $this->success_message = "Successfully created account!";
             
 

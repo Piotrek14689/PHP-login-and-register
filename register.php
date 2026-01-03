@@ -50,7 +50,7 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                     <small class="text-muted d-flex align-items-center gap-1 mt-1 password-hint">
                         <span>ⓘ</span>
-                        <span id="length" class="not-met smooth-transition">Mininum 8 chars</span>
+                        <span id="length" class="not-met smooth-transition">Minimum 8 chars</span>
                         <span id="ucase" class="not-met smooth-transition">Uppercase</span>
                         <span id="lcase" class="not-met smooth-transition">Lowercase</span>
                         <span id="number" class="not-met smooth-transition">Number</span>
@@ -58,7 +58,7 @@
                     </small>
                 </div>
                 <div class="mb-3">
-                    <label for="password2" class="form-label">Confirm password</label>
+                    <label for="confirm_password" class="form-label">Confirm password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                 </div>
                 <button type="submit" class="btn btn-primary" disabled>Register</button>
