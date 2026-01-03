@@ -1,10 +1,10 @@
 <?php
 class Login
 {
-    private $success_message = null;
-    private $error_message = null;
+    private string $success_message = "";
+    private string $error_message = "";
 
-    private function checkUsername($username)
+    private function checkUsername($username): bool
     {
         if(ctype_alnum($username))
             return true;
@@ -12,7 +12,7 @@ class Login
 
     }
 
-    private function checkPassword($password)
+    private function checkPassword($password) : bool
     {
         return
             preg_match('/[A-Z]/', $password) &&
@@ -23,13 +23,16 @@ class Login
 
     }
 
-    public function login_authorization()
+    public function login_authorization() : null
     {
         if (!empty($_POST["login"]) && !empty($_POST["password"])) {
-            $con = mysqli_connect("localhost", "root", "", "users_db");
-            if (!$con) {
-                echo "Database error!";
-            } 
+
+            try {
+                $con = mysqli_connect("localhost", "root", "", "users_db");
+            } catch (Exception $ex) {
+                $this->error_message = "Database connection error! Please try again later.";
+                return null;
+            }
             $login = $_POST["login"];
             $login_escaped = mysqli_real_escape_string($con, $_POST["login"]);
             $password_input = $_POST["password"];
@@ -38,14 +41,14 @@ class Login
             if(!$this->checkUsername($login))
             {
                 $this->error_message = "Username must contain only alphanumeric characters.";
-                return;
+                return null;
             }
 
             $res = mysqli_query($con, "SELECT * FROM users WHERE username='$login_escaped'");
 
             if (mysqli_num_rows($res) == 0) {
                 $this->error_message = "Incorrect username or password";
-                return;
+                return null;
             } 
             while ($users = mysqli_fetch_assoc($res)) {
                 $password_hash = $users["password"];
@@ -53,15 +56,16 @@ class Login
 
             if (!password_verify($password_input, $password_hash)) {
                 $this->error_message = "Incorrect username or password";
-                return;
+                return null;
             } 
             $this->success_message = "Welcome, $login!";
             
             mysqli_close($con);
             
         }
+        return null;
     }
-    public function register()
+    public function register() : null
     {
         
         if (!empty($_POST["login"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
@@ -71,12 +75,12 @@ class Login
 
             if ($password != $confirm_password) {
                 $this->error_message = "Passwords don't match!";
-                return;
+                return null;
             }
             if(!$this->checkUsername($login))
             {
                 $this->error_message = "Username must contain ONLY alphanumeric characters.";
-                return;
+                return null;
             }
             if(!$this->checkPassword($password))
             {
@@ -92,26 +96,21 @@ class Login
 
             if (mysqli_num_rows($res) != 0) {
                 $this->error_message = "Username already taken!";
-                return;
+                return null;
             } 
             mysqli_query($con, "INSERT INTO users (username, password) VALUES ('$login_escaped', '$password_escaped')");
             $this->success_message = "Successfully created account!";
-            
-
 
             mysqli_close($con);
 
-
-            
-
-
         }
+        return null;
     }
-    public function getError()
+    public function getError() : string
     {
         return $this->error_message;
     }
-    public function getSuccess()
+    public function getSuccess() : string
     {
         return $this->success_message;
     }
