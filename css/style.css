@@ -35,3 +35,7 @@
     content: ",";
     color: var(--bs-secondary-color);
 }
+
+.smooth-transition{
+    transition: color 0.4s ease;
+}
