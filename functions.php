@@ -18,7 +18,7 @@ class Login
             preg_match('/[A-Z]/', $password) &&
             preg_match('/[a-z]/', $password) &&
             preg_match('/\d/', $password) &&
-            preg_match('/[^a-zA-Z0-9]/', $password);
+            preg_match('/[^a-zA-Z0-9\s]/', $password);
 
 
     }
@@ -30,7 +30,7 @@ class Login
             try {
                 $con = mysqli_connect("localhost", "root", "", "users_db");
             } catch (Exception $ex) {
-                $this->error_message = "Database connection error! Please try again later.";
+                $this->error_message = "Database connection error ($ex)! Please try again later.";
                 return null;
             }
             $login = $_POST["login"];
@@ -49,7 +49,7 @@ class Login
             if (mysqli_num_rows($res) == 0) {
                 $this->error_message = "Incorrect username or password.";
                 return null;
-            } 
+            }
             while ($users = mysqli_fetch_assoc($res)) {
                 $password_hash = $users["password"];
             }
@@ -57,11 +57,11 @@ class Login
             if (!password_verify($password_input, $password_hash)) {
                 $this->error_message = "Incorrect username or password.";
                 return null;
-            } 
+            }
             $this->success_message = "Welcome, $login!";
-            
+
             mysqli_close($con);
-            
+
         }elseif(isset($_POST["login"]) || isset($_POST["password"])){
             $this->error_message = "Please fill in all fields.";
         }
@@ -69,13 +69,13 @@ class Login
     }
     public function register() : null
     {
-        
+
         if (!empty($_POST["login"]) && !empty($_POST["password"]) && !empty($_POST["confirm_password"])) {
 
             try {
                 $con = mysqli_connect("localhost", "root", "", "users_db");
             } catch (Exception $ex) {
-                $this->error_message = "Database connection error! Please try again later.";
+                $this->error_message = "Database connection error($ex)! Please try again later.";
                 return null;
             }
             $login = $_POST["login"];
@@ -106,7 +106,7 @@ class Login
             if (mysqli_num_rows($res) != 0) {
                 $this->error_message = "Username already taken!";
                 return null;
-            } 
+            }
             mysqli_query($con, "INSERT INTO users (username, password) VALUES ('$login_escaped', '$password_escaped')");
             $this->success_message = "Successfully created account!";
 

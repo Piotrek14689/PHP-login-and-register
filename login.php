@@ -56,5 +56,6 @@
 
     </div>
     <script src="js/theme.js"></script>
+    <script src="js/login_input_validation.js"></script>
 </body>
 </html>

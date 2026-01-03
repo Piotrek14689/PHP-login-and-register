@@ -61,7 +61,7 @@
                     <label for="confirm_password" class="form-label">Confirm password</label>
                     <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                 </div>
-                <button type="submit" class="btn btn-primary" disabled>Register</button>
+                <button type="submit" class="btn btn-primary" id="submit" disabled>Register</button>
             </form>
 
             <div class="text-center mt-3">
@@ -74,6 +74,6 @@
         </div>
     </div>
     <script src="js/theme.js"></script>
-    <script src="js/input_validation.js"></script>
+    <script src="js/register_input_validation.js"></script>
 </body>
 </html>
