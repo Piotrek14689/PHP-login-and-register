@@ -86,7 +86,12 @@ class Login
             {
                 $this->error_message = "Password requirements not met.";
             }
-            $con = mysqli_connect("localhost", "root", "", "users_db");
+            try {
+                $con = mysqli_connect("localhost", "root", "", "users_db");
+            } catch (Exception $ex) {
+                $this->error_message = "Database connection error! Please try again later.";
+                return null;
+            }
 
             $login_escaped = mysqli_real_escape_string($con, $login);
             $password_escaped = mysqli_real_escape_string($con, password_hash($password, PASSWORD_DEFAULT));
