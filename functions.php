@@ -94,6 +94,7 @@ class Login
             if(!$this->checkPassword($password))
             {
                 $this->error_message = "Password requirements not met.";
+                return null;
             }
 
 
