@@ -40,6 +40,7 @@
                 <div class="mb-3">
                     <label for="login" class="form-label">Login</label>
                     <input type="text" class="form-control" id="login" name="login" required autocomplete="off">
+                    <div class="invalid-feedback" id="loginFeedback">Login must contain only letters and numbers.</div>
                     <small class="login-hint text-muted d-flex align-items-center gap-1 mt-1">
                         <span>ⓘ</span>
                         Only letters and numbers.
@@ -48,18 +49,21 @@
                 <div class="mb-3">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control" id="password" name="password" required>
-                    <small class="text-muted d-flex align-items-center gap-1 mt-1 password-hint">
-                        <span>ⓘ</span>
-                        <span id="length" class="not-met smooth-transition">Minimum 8 chars</span>
-                        <span id="ucase" class="not-met smooth-transition">Uppercase</span>
-                        <span id="lcase" class="not-met smooth-transition">Lowercase</span>
-                        <span id="number" class="not-met smooth-transition">Number</span>
-                        <span id="special_character" class="not-met smooth-transition">Special character</span>
-                    </small>
+                    <div class="invalid-feedback" id="passwordFeedback">
+                        Password must contain:
+                        <ul class="mb-0">
+                            <li id="pwRuleLength">Minimum 8 characters</li>
+                            <li id="pwRuleUpper">An uppercase letter</li>
+                            <li id="pwRuleLower">A lowercase letter</li>
+                            <li id="pwRuleNumber">A number</li>
+                            <li id="pwRuleSpecial">A special character</li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="confirm_password" class="form-label">Confirm password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password">
+                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                    <div class="invalid-feedback" id="confirmPasswordFeedback">Passwords don't match.</div>
                 </div>
                 <button type="submit" class="btn btn-primary" id="submit" disabled>Register</button>
             </form>
